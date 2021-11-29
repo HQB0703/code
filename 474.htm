@@ -1,161 +1,171 @@
 <!DOCTYPE html>
 <html>
-<head>		
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta charset="UTF-8">
-	<title>Ở ĐÂY BẠN ƠI</title>
-	<link rel="stylesheet" href="https://raw.githubusercontent.com/HQB0703/code/main/style.css">
-
+<head>
 <style>
+@import 'https://fonts.googleapis.com/css?family=Reem+Kufi';
+
 body {
-  width: 100%;
-  height: ;
-  background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190801/pngtree-abstract-pattern-repeat-background-vector-template-image_286161.jpg');
-  background-size:125%;
-  background-repeat:x,y;
-}
-</style>
-</head>
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
-/* nút mở*/
-.open-button {
-  background-color: #5bcf34;
-  color: white;
-  padding: 16px 20px;
-  border: 1;
-  cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
-  bottom: 23px;
-  right: 25px;
-  width: 250px;
+  background: #fff;
 }
 
-/* viền pop-up */
-.form-popup {
+
+@keyframes wave {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.music-card {
+  margin: 10px auto;
+  background: #fff;
+  box-shadow: 0px 8px 28px -9px rgba(0,0,0,0.45);
+  overflow: hidden;
+  position: relative;
+  width: 150px;
+  height: 300px;
+  border-radius: 6px;
+}
+
+.image {
+  background: url('https://serving.photos.photobox.com/0457010062400b1e3fef1a815307d6e0e0b592f294f0c2209568107e884b9f58d07c024c.jpg') no-repeat 75%;
+  background-size: cover;  
+  position: absolute;
+  z-index: 1;
+  opacity: 0.3;
+  height: 150px;
+  width: 150px;
+}
+
+.image:after {
+  height: 100px;
+  content: '';
+  top: 200px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  background: linear-gradient(rgba(9, 2, 4, 0), #444);
+}
+
+.wave {
+  position: absolute;
+  height: 750px;
+  width: 750px;
+  opacity: 0.6;
+  left: 0;
+  top: 0;
+  margin-left: -180%;
+  margin-top: 150%;
+  background: radial-gradient(#353535, #383737);
+}
+
+.wave:nth-child(2),
+.wave:nth-child(3) {
+  top: 10px;
+}
+
+.playing .wave {
+  border-radius: 40%;
+  animation: wave 3000ms infinite linear;
+}
+/* when stop */
+.wave {
+  border-radius: 40%;
+  animation: wave 55s infinite linear;
+}
+
+.playing .wave:nth-child(2) {
+  animation-duration: 4000ms;
+}
+/* when stop */
+.wave:nth-child(2) {
+  animation-duration: 50s;
+}
+
+.playing .wave:nth-child(3) {
+  animation-duration: 5000ms;
+}
+/* when stop */
+.wave:nth-child(3) {
+  animation-duration: 45s;
+}
+
+.info {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.4em;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  font-family: 'Reem Kufi', sans-serif;
+}
+
+.artist {
+  color: #cfcfcf;
+  font-size: 1.2em;
+  letter-spacing: 0.08em;
+  font-family: 'Reem Kufi', sans-serif;
+  margin-top: -10px;
+}
+
+.fa {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+}
+
+.fa-play {
   display: none;
-  position: fixed;
-  bottom: 0;
-  right: 15px;
-  border: 8px solid #f1f1f1;
-  z-index: 9;
-}
-
-/* màu pop up */
-.form-container {
-  max-width: 350px;
-  padding: 10px;
-  background-color:rgba(255, 255, 255, .88);">;
-}
-
-/* NỀN Ô NHẬP */
-.form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #ebebeb;
-}
-
-/* khi nhập*/
-.form-container input[type=un]:focus, .form-container input[type=pass]:focus {
-  background-color: #ddd;
-  outline: none;
-}
-
-/* kiểu nút gửi và đóg */
-.form-container .btn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
-
-/* màu khi đóng */
-.form-container .cancel {
-  background-color: red;
-}
-
-/* vài hiệu ứng với các nút */
-.form-container .btn:hover {
-  opacity: 1;
-  background-color: #e4007a;
-}
+}	
 
 
+				</style>
+				</head>
+<div class='music-card playing'>
+  
+  <div class='image'></div>
+  
+  <div class='wave'></div>
+  <div class='wave'></div>
+  <div class='wave'></div>
+  
+  <div class='info'>
+    <h2 class='title'>Supẻ idol</h2>
+    <div class='artist'>cn</div>
+  </div>
+  
+  <i class="fa fa-pause trigger" aria-hidden="true"></i>
+  <i class="fa fa-play trigger" aria-hidden="true"></i>
+</div>
 
-<!-- btn là các nút trong pop up -->
-</style>
-</head>
-<body>
-  <div>
-<center>
-				<h2><strong>
-				 
-				     <sub>_</sub>
-			         <sup>_</sup>
-				          <sub>-</sub>
-				            <sup>-</sup>
-
-				      TRẢ LỜI CÂU HỎI 
-				                <sup>-</sup>
-			                    <sub>-</sub>
-				                    <sup>_</sup>
-				                        <sub>_</sub>
-				          
-                                  </h2></strong>
-				</center>
-				</div>
-	<div>
-	  
-	   <h2 style="background-color:Tomato">      
-Câu hỏi này rất quan trọng, nếu không trả lời sẽ bị ngáo và bắn PUBG như Bot 😐
-</h2
-</div><h3
-<style ="background-color:MediumSeaGreen;">Nhấn vào nút 
-"<span style="color: white; background-color: green">Trả lời ngay</span>"
- ở bên dưới các câu hỏi sẽ xuất hiện.🙂
-
-</h3>
 <div>
-
-   
-</div>
-<button class="open-button" onclick="openForm()">TRẢ LỜI NGAY</button>
-<!-- Đường dẫn nút gửi -->
-<div class="form-popup" id="myForm">
-  <form action="https://youtu.be/ioNng23DkIM" class="form-container">
-    <h1>Câu Hỏi:</h1>
-<h2>🧐🧐🧐🧐!</h2>
-    <label for="email"><b>Tên của bạn là gì ???</b></label>
-    <input type="text" placeholder=" Trả lời ở đây" name="email" required>
-<label for="email"><b>Bạn có bị ngáo không ???</b></label>
-
-
-    <input type="text" placeholder=" Trả lời ở đây" name="email" required>
-
-
-   
-    <button type="submit" class="btn">Gửi Câu Trả Lời</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">Đóng</button>
-  </form>
+		<h1> loading</h1>		
 </div>
 
-<script>
-function openForm() {
-  document.getElementById("myForm").style.display = "block";
-}
+				<script>
+								var audio = new Audio('https://www.mboxdrive.com/y2mate.com%20-%20%E6%9B%B4%E6%B4%97%E8%85%A6%E7%9A%84%E7%86%B1%E6%84%9B105%E5%BA%A6%E7%9A%84%E4%BD%A0%20Super%20Idol%E5%9C%A880%E5%B9%B4%E4%BB%A3%E5%B0%B1%E6%98%AF%E9%86%AC%E7%9A%84feel%E4%BD%8E%E6%B8%85Dissy%E7%BF%BB%E5%94%B1MV%20Cover.mp3');
+audio.volume = 0.1;
+audio.autoplay = true;
 
-function closeForm() {
-  document.getElementById("myForm").style.display = "none";
-}
-</script>
-
-</body>
-</html>
+$('.trigger').click(function() {
+  if (audio.paused == false) {
+      audio.pause();
+      $('.fa-play').show();
+      $('.fa-pause').hide();
+      $('.music-card').removeClass('playing');
+  } else {
+      audio.play();
+      $('.fa-pause').show();
+      $('.fa-play').hide();
+      $('.music-card').addClass('playing');
+  }
+});
+				</script>

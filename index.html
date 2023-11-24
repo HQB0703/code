@@ -52,6 +52,8 @@
   </div>
 </div>
 
+</div>
+
       <div class="field is-grouped">
         <div class="control">
           <button class="button is-primary" type="submit" id="submit-button">
@@ -75,101 +77,121 @@
     ></div>
 
 
-<script>
-   
-  function updateClock() {
-    var now = new Date();
-    var hours = now.getHours().toString().padStart(2, '0');
-    var minutes = now.getMinutes().toString().padStart(2, '0');
-    var seconds = now.getSeconds().toString().padStart(2, '0');
-
-    var clockContent = hours + ":" + minutes + ":" + seconds;
-    document.getElementById("clock").textContent = clockContent;
-
-    // Update the clock every second
-    setTimeout(updateClock, 1000);
-  }
-
-  // Call the function to start the clock
-  updateClock();
-
-  document.getElementById("form").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Reset styles from previous submissions
-    var notesField = document.querySelector('textarea[name="Notes"]');
-    notesField.classList.remove("error");
-    var errorMessage = document.getElementById("notes-error");
-    errorMessage.style.display = "none";
-
-    // Check if the "Notes" field is empty
-    var notesValue = notesField.value.trim();
-
-    if (notesValue === "") {
-      // Display an error message and highlight the field
-      notesField.classList.add("error");
-      errorMessage.style.display = "block";
-      return; // Stop form submission
-    }
-
-    // Proceed with form submission
-    document.getElementById("message").textContent = "Đang xử lí...";
-    document.getElementById("message").style.display = "block";
-    document.getElementById("submit-button").disabled = true;
-
-    // Collect the form data
-    var formData = new FormData(this);
-    var keyValuePairs = [];
-    for (var pair of formData.entries()) {
-      keyValuePairs.push(pair[0] + "=" + pair[1]);
-    }
-
-    var formDataString = keyValuePairs.join("&");
-
-    // Send a POST request to your Google Apps Script
-    fetch(
-      "https://script.google.com/macros/s/AKfycbx39LVex12yvn8rGd1zRgwJeArWpLWCSrTfuhoB7nS6KBPRP0zE9uMskk4-pE0RjSYGtg/exec",
-      {
-        redirect: "follow",
-        method: "POST",
-        body: formDataString,
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8",
-        },
+    <script>
+      function updateClock() {
+        var now = new Date();
+        var hours = now.getHours().toString().padStart(2, '0');
+        var minutes = now.getMinutes().toString().padStart(2, '0');
+        var seconds = now.getSeconds().toString().padStart(2, '0');
+    
+        var clockContent = hours + ":" + minutes + ":" + seconds;
+        document.getElementById("clock").textContent = clockContent;
+    
+        // Update the clock every second
+        setTimeout(updateClock, 1000);
       }
-    )
-      .then(function (response) {
-        // Check if the request was successful
-        if (response) {
-          return response; // Assuming your script returns JSON response
-        } else {
-          throw new Error("Gửi thất bại.");
+    
+      // Call the function to start the clock
+      updateClock();
+    
+      document.getElementById("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+    
+        // Reset styles from previous submissions
+        var notesField = document.querySelector('textarea[name="Notes"]');
+        notesField.classList.remove("error");
+        var errorMessage = document.getElementById("notes-error");
+        errorMessage.style.display = "none";
+    
+        // Check if the "Notes" field is empty
+        var notesValue = notesField.value.trim();
+    
+        if (notesValue === "") {
+          // Display an error message and highlight the field
+          notesField.classList.add("error");
+          errorMessage.style.display = "block";
+          return; // Stop form submission
         }
-      })
-      .then(function (data) {
-        // Display a success message with jump_text animation
-        document.getElementById("message").textContent =
-          "Gửi thành công, cảm ơn bạn!";
-        document.getElementById("message").classList.add("jump_text");
+    
+        // Capture the browser name
+        var browserName = getBrowserName();
+    
+        // Proceed with form submission
+        document.getElementById("message").textContent = "Đang xử lí...";
         document.getElementById("message").style.display = "block";
-        document.getElementById("message").style.backgroundColor = "green";
-        document.getElementById("message").style.color = "beige";
-        document.getElementById("submit-button").disabled = false;
-        document.getElementById("form").reset();
-
-        setTimeout(function () {
-          document.getElementById("message").textContent = "";
-          document.getElementById("message").classList.remove("jump_text");
-          document.getElementById("message").style.display = "none";
-        }, 10000);
-      })
-      .catch(function (error) {
-        // Handle errors, you can display an error message here
-        console.error(error);
-        document.getElementById("message").textContent =
-          "Đã có lỗi xảy ra.";
-        document.getElementById("message").style.display = "block";
+        document.getElementById("submit-button").disabled = true;
+    
+        // Collect the form data including the browser name
+        var formData = new FormData(this);
+        formData.append("BrowserName", browserName); // Add browser name to form data
+    
+        var keyValuePairs = [];
+        for (var pair of formData.entries()) {
+          keyValuePairs.push(pair[0] + "=" + pair[1]);
+        }
+    
+        var formDataString = keyValuePairs.join("&");
+    
+        // Send a POST request to your Google Apps Script
+        fetch(
+          "https://script.google.com/macros/s/AKfycbx39LVex12yvn8rGd1zRgwJeArWpLWCSrTfuhoB7nS6KBPRP0zE9uMskk4-pE0RjSYGtg/exec",
+          {
+            redirect: "follow",
+            method: "POST",
+            body: formDataString,
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8",
+            },
+          }
+        )
+          .then(function (response) {
+            // Check if the request was successful
+            if (response) {
+              return response; // Assuming your script returns JSON response
+            } else {
+              throw new Error("Gửi thất bại.");
+            }
+          })
+          .then(function (data) {
+            // Display a success message with jump_text animation
+            document.getElementById("message").textContent =
+              "Gửi thành công, cảm ơn bạn!";
+            document.getElementById("message").classList.add("jump_text");
+            document.getElementById("message").style.display = "block";
+            document.getElementById("message").style.backgroundColor = "green";
+            document.getElementById("message").style.color = "beige";
+            document.getElementById("submit-button").disabled = false;
+            document.getElementById("form").reset();
+    
+            setTimeout(function () {
+              document.getElementById("message").textContent = "";
+              document.getElementById("message").classList.remove("jump_text");
+              document.getElementById("message").style.display = "none";
+            }, 10000);
+          })
+          .catch(function (error) {
+            // Handle errors, you can display an error message here
+            console.error(error);
+            document.getElementById("message").textContent =
+              "Đã có lỗi xảy ra.";
+            document.getElementById("message").style.display = "block";
+          });
       });
-  });
-
-</script>
+    
+      // Function to get the name of the browser
+      function getBrowserName() {
+        var userAgent = navigator.userAgent;
+    
+        if (userAgent.indexOf("Chrome") != -1) {
+          return "Google Chrome";
+        } else if (userAgent.indexOf("Safari") != -1) {
+          return "Safari";
+        } else if (userAgent.indexOf("Firefox") != -1) {
+          return "Mozilla Firefox";
+        } else if (userAgent.indexOf("Edge") != -1) {
+          return "Microsoft Edge";
+        } else {
+          return "Unknown Browser";
+        }
+      }
+    </script>
